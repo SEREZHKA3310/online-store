@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+```tsx
+import type Component from './Component'
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+class Router {
+  private container!: Node
+  private currentPage: Component | null = null
+  private routes = new Map<string, Component>()
 
-Currently, two official plugins are available:
+  constructor(container?: Node) {
+    this.container = container!
+  }
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+  private onRoute() {
+    const route = this.routes.get(window.location.pathname)
+    if (!route) {
+      throw new Error()
+    } else {
+      if (this.currentPage) {
+        this.currentPage.dispatchComponentWillUmnout()
+        this.container.removeChild(this.currentPage.getContent())
+      }
+      this.currentPage = route
 
-## React Compiler
+      this.container.appendChild(route.getContent())
+      route.dispatchComponentDidMount()
+    }
+  }
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+  public navigate(pathname: string) {
+    window.history.pushState(null, '', pathname)
 
-## Expanding the ESLint configuration
+    this.onRoute()
+  }
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+  public redirect(pathname: string) {
+    window.history.replaceState(null, '', pathname)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+    this.onRoute()
+  }
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  public use(pathname: string, page: new () => Component) {
+    this.routes.set(pathname, new page())
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    return this
+  }
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+  public start() {
+    window.addEventListener('popstate', this.onRoute.bind(this))
+    this.onRoute()
+  }
+}
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+export default Router
 ```
