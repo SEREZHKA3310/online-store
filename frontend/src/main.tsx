@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { StrictMode } from 'react'
 import CartProvider from './context/CartContext'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const root = document.getElementById('root')
 
@@ -20,7 +21,9 @@ ReactDOM.createRoot(root).render(
     <CartProvider>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </QueryClientProvider>
       </BrowserRouter>
     </CartProvider>
