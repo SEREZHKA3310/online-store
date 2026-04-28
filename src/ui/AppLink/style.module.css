@@ -1,0 +1,36 @@
+.app_link {
+  color: var(--primary-color);
+  font-family: Outfit;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.is_active {
+  text-decoration: underline;
+  text-underline-offset: 2px  
+}
+
+.button_black {
+  font-family: 'Raleway';
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 43px;
+  background-color: var(--text-color2D);
+  color: var(--white-color)
+}
+
+.link_result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Horizontal';
+  font-weight: 500;
+  text-decoration: none;
+  background-color: rgba(8, 8, 8, 0.8);
+  color: var(--white-color);
+  width: 640px;
+  height: 48px;
+}

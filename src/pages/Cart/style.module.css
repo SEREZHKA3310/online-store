@@ -1,0 +1,84 @@
+.cart_wrapper {
+  margin-top: 150px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 45px;
+}
+
+.image_wrapper {
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: background-color 0.4s ease-in;
+  width: 560px;
+  height: 560px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+.image {
+  width: 560px;
+  height: 560px;
+}
+
+.info_wrapper:not(:last-child) {
+  margin-bottom: 20px;
+  display: flex;
+  column-gap: 20px;
+}
+
+.desc_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.total_wrapper {
+  width: 705px;
+  height: 492px;
+  border: 1px solid #5C5C5C;
+  padding: 32px;
+  top: 45px;
+  position: sticky;
+
+  & > ul {
+    margin-block: 32px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+  }
+
+  & > ul > li {
+    display: flex;
+    justify-content: space-between;
+  } 
+}
+
+.total_text {
+  font-family: 'Outfit';
+  font-size: 26px;
+  color: var(--text-color08);
+}
+
+.total_info {
+  color: rgba(33, 33, 33, 0.4)
+}
+
+.promocode {
+  margin-top: 32px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(51, 51, 51, 1);
+}
+
+.promocode > p {
+  margin-bottom: 5px;
+}
+
+.info {
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.name {
+  font-weight: 700;
+}

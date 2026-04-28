@@ -1,0 +1,19 @@
+.button_follow {
+  color: var(--text-color21);
+  border: 1px solid var(--text-colorA3);
+  background-color: var(--background-color);
+  width: 155px;
+  height: 42px;
+  font-family: 'Railway';
+}
+
+.button_click {
+  width: 155px;
+  height: 48px;
+  font-size: 20px;
+  margin-left: 16px;
+  font-family: 'Horizontal';
+  border: 0;
+  color: var(--white-color);
+  background-color: rgba(8, 8, 8, 0.8);
+}

@@ -1,0 +1,19 @@
+.header_text {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  q {
+    font-family: 'Source Serif 4';
+    font-weight: 400;
+    font-size: 74px;
+    letter-spacing: -3%;
+  }
+}
+
+.catalog_card {
+  display: flex;
+  justify-content: space-between;
+}

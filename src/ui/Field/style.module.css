@@ -1,0 +1,22 @@
+.input_email {
+  border: 1px solid var(--text-colorA3);
+  color: var(--text-colorE1);
+  background-color: var(--background-color);
+  width: 300px;
+  height: 42px;
+  padding-left: 15px;
+  margin-right: 12px;
+}
+
+.input_code {
+  width: 466px;
+  height: 48px;
+  background-color: var(--white-color);
+  color: var(--text-color21);
+  padding-inline: 16px;
+  border: 0;
+}
+
+.input_code::placeholder {
+  color: rgba(33, 33, 33, 0.16);
+}

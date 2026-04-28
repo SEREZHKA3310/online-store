@@ -1,0 +1,14 @@
+.header_wrapper {
+  border-bottom: 1px solid var(--text-color21);
+}
+
+.header_content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+}
+
+.logo_container > a:not(:last-child) {
+  margin-right: 32px;
+}

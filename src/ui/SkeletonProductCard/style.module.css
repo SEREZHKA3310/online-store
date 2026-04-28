@@ -1,0 +1,37 @@
+.card_wrapper {
+  width: 560px;
+  height: 560px;
+}
+
+@keyframes changeColor {
+  0% {
+    background-color: var(--text-colorE1);
+  }
+  50% {
+    background-color: var(--text-color4A);
+  }
+  100% {
+    background-color: var(--text-colorE1);
+  }
+}
+
+.skeleton {
+  animation: changeColor 2.5s linear infinite;
+}
+
+.skeleton_image {
+  width: 560px;
+  height: 500px;
+  margin-bottom: 13px;
+}
+
+.skeleton_title {
+  width: 200px;
+  height: 24px;
+  margin-bottom: 4px;
+}
+
+.skeleton_text {
+  width: 50px;
+  height: 24px;
+}

@@ -1,0 +1,31 @@
+.footer_wrapper {
+  border-top: 1px solid var(--text-color21);
+}
+
+.footer_content {
+  padding-top: 58px;
+  padding-bottom: 140px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.social_media {
+  display: flex;
+  flex-direction: column;
+  row-gap: 14px;
+}
+
+.logo_container > li:not(:last-child) {
+  margin-right: 17px;
+}
+
+.local_navigation {
+  display: flex;
+  column-gap: 60px;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}

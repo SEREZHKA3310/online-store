@@ -1,0 +1,26 @@
+.block_container {
+  display: flex;
+  column-gap: 21px;
+}
+
+.block_wrapper {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.block {
+  width: 35px;
+  height: 35px;
+  background-color: var(--text-color2D);
+  color: var(--white-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+}
+
+.trash_button {
+  border: 0;
+  background-color: transparent;
+}
