@@ -9,11 +9,11 @@ interface ProductPageProps {
   isCatalog?: boolean
 }
 
-const ProductListPage = ({pageSize, isCatalog = false}: ProductPageProps) => {
+const ProductListPage = ({ isCatalog = false}: ProductPageProps) => {
   return (
     <div className={styles.product_list}>
       <Suspense fallback={<SkeletonProductCard />}>
-        <ProductListContent pageSize={pageSize} isCatalog={isCatalog} />
+        <ProductListContent />
       </Suspense>
     </div>
   )

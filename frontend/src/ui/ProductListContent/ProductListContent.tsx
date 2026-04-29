@@ -6,18 +6,18 @@ interface ProductListContentProps {
   isCatalog?: boolean
 }
 
-const ProductListContent = ({pageSize, isCatalog = false}: ProductListContentProps) => {
-  const {products, setPage} = useProducts(pageSize, isCatalog)
-  console.log(products)
+const ProductListContent = () => {
+  const data = useProducts()
+
   return (
     <>
       {
-        (products?.map((product) =>
+        (data.pages.map((page) => page.results.map((product) => 
           <ProductCard id={product.id} key={product.id} name={product.name} main_image={product.main_image} price={product.price} />
-        ))
+        )))
       }
-      <button onClick={() => setPage(1)}>1</button>
-      <button onClick={() => setPage(2)}>2</button>
+      {/* <button onClick={() => setPage(1)}>1</button>
+      <button onClick={() => setPage(2)}>2</button> */}
     </>
   )
 }

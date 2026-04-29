@@ -1,21 +1,21 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import useDataPage from "./useDataPage"
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+// import useDataPage from "./useDataPage";
 import { fetchProducts } from "../api/fetchWrapper";
 
-const useProducts = (pageSize: number = 6, isCatalog: boolean = false) => {
-  const {page, setPage} = useDataPage()
+const useProducts = () => {
+  // const { page, setPage } = useDataPage();
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['products', page, isCatalog],
-    queryFn: () => fetchProducts(page, pageSize)
+  const { data } = useSuspenseInfiniteQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _, lastPageParam) => lastPage.next && lastPageParam + 1,
+
+    // select: (data) => ({ ...data, pages: data.pages.map((page) => page.results) }),
   });
 
-  return {
-    products: data.products,
-    totalPages: data.totalPages,
-    page,
-    setPage
-  }
-}
+  return data;
+};
 
-export default useProducts
+export default useProducts;
