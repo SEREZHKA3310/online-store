@@ -11,17 +11,6 @@ type HttpResponse<T> = {
   status: number;
 };
 
-class HttpError extends Error {
-  status: number;
-  data: unknown;
-
-  constructor(message: string, status: number, data: unknown) {
-    super(message);
-    this.status = status;
-    this.data = data;
-  }
-}
-
 const BASE_URL = "/api";
 
 const createQueryString = (params?: RequestConfig["params"]) => {
@@ -58,10 +47,6 @@ const request = async <T>(method: HttpMethod, url: string, config?: RequestConfi
 
   const data = await parseResponse(response);
 
-  if (!response.ok) {
-    throw new HttpError("Request failed", response.status, data);
-  }
-
   return {
     data: data as T,
     status: response.status,
@@ -76,5 +61,4 @@ const httpClient = {
   delete: <T>(url: string, config?: Omit<RequestConfig, "body">) => request<T>("DELETE", url, config),
 };
 
-export { HttpError };
 export default httpClient;

@@ -10,7 +10,7 @@ interface CartContextType {
   cart: Cart;
   setCart: (value: Cart) => void;
   addToCart: (newCloth: Cart[0]) => void;
-  deleteCloth: (productId: number) => void;
+  deleteCloth: (productId: number, productSize: string) => void;
 }
 
 export const CartContext = createContext<CartContextType>({})

@@ -5,21 +5,22 @@ import { useContext } from 'react'
 
 interface CounterProps {
   clothesId: number,
+  clothesSize: string
 }
 
-const Counter = ({clothesId}: CounterProps) => {
+const Counter = ({clothesId, clothesSize}: CounterProps) => {
   const { cart, setCart, deleteCloth } = useContext(CartContext)
 
   const incCount = () => {
-    const newcart = cart.map((item) => 
-      item.id === clothesId ? { ...item, count: item.count + 1 } : item
+    const newcart = cart.map((item) =>
+      item.id === clothesId && item.size === clothesSize ? { ...item, count: item.count + 1 } : item
     );
     setCart(newcart);
   }
 
   const decCount = () => {
     const newcart = cart.map((item) => 
-      item.id === clothesId ? { ...item, count: item.count - 1 } : item
+      item.id === clothesId && item.size === clothesSize ? { ...item, count: item.count - 1 } : item
     ).filter(item => item.count > 0);
     
     setCart(newcart);
@@ -29,12 +30,12 @@ const Counter = ({clothesId}: CounterProps) => {
     <div className={styles.block_container}>
       <div className={styles.block_wrapper}>
         <button className={styles.block} onClick={decCount}>-</button>
-        <p className={styles.block}>{cart.find(({id}) => clothesId === id)
+        <p className={styles.block}>{cart.find(({id, size}) => clothesId === id && clothesSize === size)
           ?.count}
         </p>
         <button className={styles.block} onClick={incCount}>+</button>
       </div>
-      <button className={styles.trash_button} onClick={() => deleteCloth(clothesId)}>
+      <button className={styles.trash_button} onClick={() => deleteCloth(clothesId, clothesSize)}>
         <TrashCanSvg />
       </button>
     </div>

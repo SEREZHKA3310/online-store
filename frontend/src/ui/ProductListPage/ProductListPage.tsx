@@ -1,4 +1,4 @@
-import ProductListContent from '../ProductListContent/ProductListContent'
+import { ProductList } from '~components'
 import SkeletonProductCard from '../SkeletonProductCard/SkeletonProductCard'
 import styles from './style.module.css'
 
@@ -13,7 +13,7 @@ const ProductListPage = ({ isCatalog = false}: ProductPageProps) => {
   return (
     <div className={styles.product_list}>
       <Suspense fallback={<SkeletonProductCard />}>
-        <ProductListContent />
+        <ProductList type='infinity' />
       </Suspense>
     </div>
   )

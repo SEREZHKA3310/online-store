@@ -5,7 +5,7 @@ import { fetchProducts } from "../api/fetchWrapper";
 const useProducts = () => {
   // const { page, setPage } = useDataPage();
 
-  const { data } = useSuspenseInfiniteQuery({
+  const { data, fetchNextPage } = useSuspenseInfiniteQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
 
@@ -15,7 +15,7 @@ const useProducts = () => {
     // select: (data) => ({ ...data, pages: data.pages.map((page) => page.results) }),
   });
 
-  return data;
+  return { products: data, fetchNextPage };
 };
 
 export default useProducts;

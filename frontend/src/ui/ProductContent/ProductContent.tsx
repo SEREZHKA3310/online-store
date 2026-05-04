@@ -1,11 +1,11 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useContext, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import fetchProduct from "../../api/fetchProduct";
 import styles from './style.module.css';
-import Counter from "../Counter/Counter";
 import { CartContext } from "../../context/CartContext";
 import AppLink from "../AppLink/AppLink";
+import fetchPrice from "../../api/fetchPrice";
 
 const ProductContent = () => {
   const { id } = useParams();
@@ -15,16 +15,25 @@ const ProductContent = () => {
     queryFn: () => fetchProduct(Number(id))
   });
 
+
+  const {data: sizes} = useQuery({
+    queryKey: ['product', id, 'selectedSize'],
+    queryFn: () => fetchPrice(Number(id))
+  })
+
+  const [selectedSize, setSelectedSize] = useState<string>('')
+
   const context = useContext(CartContext);
-  if (!context) return null
   
   const { cart, addToCart } = context;
 
-  if (typeof cloth === 'string') {
-    return <div className="container">{cloth}</div>
+  const listOfCart = useMemo(() => cart.filter(({ id, }) => id === cloth.id), [cart, cloth.id]);
+
+  if (!sizes) {
+    return '67'
   }
 
-  const isInBasket = cart.some(({ id }) => id === cloth.id);
+  const price = sizes.find((size) => size.size === selectedSize)?.price
 
   return (
     <div className={`container ${styles.wrapper}`}>
@@ -38,7 +47,7 @@ const ProductContent = () => {
       
       <div className={styles.product_wrapper}>
         <p className={styles.header_name}>{cloth.name}</p>
-        <p className={styles.header_price}>₽{cloth.price}</p>
+        <p className={styles.header_price}>{price}</p>
         
         <div className={styles.info_wrapper}>
           <div className={styles.desc_wrapper}>
@@ -52,18 +61,20 @@ const ProductContent = () => {
             ))}
           </ul>
         </div>
-
-        {isInBasket ? (
+          <div id="" className={styles.size_buttons}>
+            {typeof sizes !== 'string' && sizes.map((size, key) => 
+              <button className={`${styles.size_button} ${selectedSize === size.size ? styles.active : ''}`} key={key} onClick={() => setSelectedSize(size.size)}>{size.size}</button>
+            )}
+          </div>
+        {listOfCart.some((cloth) => cloth.size === selectedSize) ? (
           <div className={styles.counter_wrapper}>
-            <Counter clothesId={cloth.id} />
-            <AppLink to="/cart" className="button_black">Перейти в корзину</AppLink>
+            <AppLink to="/cart" className={styles.add_basket}>Перейти в корзину</AppLink>
           </div>
         ) : (
           <button 
-            type="button" 
-            className={styles.add_basket} 
-            onClick={() => addToCart({ id: cloth.id, count: 1 })}
-          >
+            type="button"  
+            className={styles.add_basket}
+            onClick={() => addToCart({ ...cloth, price: sizes.find((cloth) => cloth.size === selectedSize).price , size: selectedSize, count: 1})}>
             Добавить в корзину
           </button>
         )}

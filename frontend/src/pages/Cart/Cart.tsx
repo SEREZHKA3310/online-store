@@ -1,5 +1,4 @@
 import { useContext, useMemo } from "react"
-import useProducts from "../../hooks/useProducts"
 import AppLink from "../../ui/AppLink/AppLink"
 import Counter from "../../ui/Counter/Counter"
 import { CartContext } from "../../context/CartContext"
@@ -10,27 +9,22 @@ import Button from "../../ui/Button/Button"
 const Cart = () => {
   const { cart } = useContext(CartContext)
 
-  const { products } = useProducts()
+  const priceResult = useMemo(() => 
+    cart.reduce((acc, {price, count}) => acc + price * count, 0)
+  , [cart])
 
-  const clothes = useMemo(() => {
-    const cartIds = new Set(cart.map(item => item.id))
-    return products.filter(product => cartIds.has(product.id))
-  }, [cart, products])
-
-  const priceResult = clothes.reduce((acc, {price}) => acc + price, 0)
-  const priceDelivery = Math.min(500, priceResult * 1000 / 10)
-
+  const priceDelivery = Math.min(500, priceResult)
   return (
     <div className={`container ${styles.cart_wrapper}`}>
-      { clothes.length ?
+      { cart.length ?
         <>
           <div>
-            {clothes.map((cloth) =>
-              <div key={cloth.id} className={styles.info_wrapper}>
+            {cart.map((cloth, index) =>
+              <div key={index} className={styles.info_wrapper}>
                 <div>
                   <AppLink to={`/product/${String(cloth.id)}`}>
                     <div className={styles.image_wrapper}>
-                      <img src={cloth.mainImage} alt={cloth.name} className={styles.image} />
+                      <img src={cloth.main_image} alt={cloth.name} className={styles.image} />
                     </div>
                   </AppLink>
                 </div>
@@ -44,7 +38,7 @@ const Cart = () => {
                     </AppLink>
                   </div>
                   <div>
-                    <Counter clothesId={cloth.id} />
+                    <Counter clothesId={cloth.id} clothesSize={cloth.size} />
                   </div>
                 </div>
               </div>
@@ -63,7 +57,7 @@ const Cart = () => {
                 <p className={styles.total_info}>Предполагаемый налог</p><p>₽0</p>
               </li>
               <li>
-                <p className={styles.total_info}>Итого</p><p>₽{priceResult + priceDelivery / 1000}</p>
+                <p className={styles.total_info}>Итого</p><p>₽{priceResult + priceDelivery}</p>
               </li>
             </ul>
             <AppLink to='' className="link_result">Перейти к оформлению заказа</AppLink>

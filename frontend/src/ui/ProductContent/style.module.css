@@ -64,6 +64,51 @@
   font-family: 'Outfit';
 }
 
+.add_basket:hover {
+  background-color: rgba(45, 45, 45, 0.8);
+}
+
+.size_buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.size_button {
+  min-width: 52px;
+  height: 42px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  font-family: 'Outfit';
+  font-size: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.size_button:hover {
+  border-color: rgba(0, 0, 0, 0.8);
+}
+
+.active {
+  color: var(--white-color);
+  background-color: rgba(0, 0, 0, 0.8);
+  border-color: rgba(0, 0, 0, 0.8);
+}
+
+.size_button:disabled {
+  color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.2);
+  cursor: not-allowed;
+}
+
 .counter_wrapper {
   display: flex;
   column-gap: 30px;

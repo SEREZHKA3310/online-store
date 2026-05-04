@@ -1,7 +1,0 @@
-.product_list {
-  display: flex;
-  column-gap: 20px;
-  row-gap: 35px;
-  flex-wrap: wrap;
-  width: 100%;
-}

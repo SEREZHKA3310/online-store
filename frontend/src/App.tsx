@@ -1,7 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from "./components/layouts/Layout";
 import Home from "./pages/Home/Home";
-import Catalog from "./pages/Catalog/Catalog";
+import { Catalog } from '~routes';
 import ProductPage from './pages/Product/ProductPage';
 import Cart from './pages/Cart/Cart';
 import { Suspense } from 'react';
@@ -9,6 +9,7 @@ import SkeletonProductCard from './ui/SkeletonProductCard/SkeletonProductCard';
 
 const App = () => {
   return (
+    <BrowserRouter>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
@@ -17,6 +18,7 @@ const App = () => {
         <Route path='cart' element={<Suspense fallback={<SkeletonProductCard />}><Cart /></Suspense>} />
       </Route>
     </Routes>
+    </BrowserRouter>
   );
 }
 
