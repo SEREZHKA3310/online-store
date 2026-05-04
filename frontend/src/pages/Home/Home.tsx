@@ -1,9 +1,10 @@
 import styles from './style.module.css'
-import ImageMan from '../../../public/man.png'
-import ImageWoman from '../../../public/woman.png'
 
 import CategoryCard from '../../ui/CategoryCard/CategoryCard'
 import ProductListPage from '../../ui/ProductListPage/ProductListPage'
+
+const IMAGE_MAN = '/man.png'
+const IMAGE_WOMAN = '/woman.png'
 
 const Home = () => {
   return (
@@ -15,13 +16,13 @@ const Home = () => {
         <CategoryCard
           title='Мужская мода'
           description='Собрали идеи образов, которые помогут выглядеть стильно и современно'
-          src={ImageMan}
+          src={IMAGE_MAN}
           hasLink={true}
         />
         <CategoryCard
           title='Женская мода'
           description='Главные тренды женской моды'
-          src={ImageWoman}
+          src={IMAGE_WOMAN}
           hasLink={true}
         />
       </div>

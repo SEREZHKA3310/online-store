@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import { StrictMode } from "react";
 import CartProvider from "./context/CartContext";
+import ThemeProvider from "./context/ThemeContext";
 
 import "./styles.css";
 
@@ -17,14 +18,16 @@ window.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(element);
   const client = new QueryClient();
 
-  window.__TANSTACK_QUERY_CLIENT__ = client;
+  // window.__TANSTACK_QUERY_CLIENT__ = client;
 
   root.render(
     <StrictMode>
       <QueryClientProvider client={client}>
-        <CartProvider>
-          <App />
-        </CartProvider>
+        <ThemeProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </StrictMode>,
   );

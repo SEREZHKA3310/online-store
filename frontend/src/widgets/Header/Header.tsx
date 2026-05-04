@@ -8,6 +8,7 @@ import SearchSvg from "../../assets/svg/search.svg?react"
 import ProfileSvg from '../../assets/svg/profile.svg?react'
 import LogoSvg from "../../assets/svg/photochrom.svg?react"
 import Icon from "../../ui/Icon/Icon"
+import ThemeToggle from "./ThemeToggle"
 
 const Header = () => {
   return (
@@ -16,6 +17,7 @@ const Header = () => {
         <Link to={''}><Icon Svg={LogoSvg} width={180} height={20} label={'Логотип'} /></Link>
         <NavBar />
         <div className={styles.logo_container}>
+          <ThemeToggle />
           <Link to={''}><Icon Svg={SearchSvg} width={25} height={25} label={'Поиск'} /></Link>
           <Link to={''}><Icon Svg={ProfileSvg} width={25} height={25} label={'Профиль'} /></Link>
           <Link to={'cart'}><Icon Svg={BasketSvg} width={25} height={25} label={'Логотип'} /></Link>

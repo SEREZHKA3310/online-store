@@ -29,8 +29,12 @@
   font-family: 'Horizontal';
   font-weight: 500;
   text-decoration: none;
-  background-color: rgba(8, 8, 8, 0.8);
-  color: var(--white-color);
+  background-color: var(--solid-button-bg);
+  color: var(--solid-button-fg);
   width: 640px;
   height: 48px;
+}
+
+.link_result:hover {
+  background-color: var(--solid-button-hover-bg);
 }

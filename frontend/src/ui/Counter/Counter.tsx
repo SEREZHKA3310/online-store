@@ -35,8 +35,15 @@ const Counter = ({clothesId, clothesSize}: CounterProps) => {
         </p>
         <button className={styles.block} onClick={incCount}>+</button>
       </div>
-      <button className={styles.trash_button} onClick={() => deleteCloth(clothesId, clothesSize)}>
-        <TrashCanSvg />
+      <button
+        type="button"
+        className={styles.trash_button}
+        onClick={() => deleteCloth(clothesId, clothesSize)}
+        aria-label="Удалить из корзины"
+      >
+        <span className={styles.trash_icon}>
+          <TrashCanSvg width={27} height={27} />
+        </span>
       </button>
     </div>
   )

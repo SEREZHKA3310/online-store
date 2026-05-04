@@ -37,8 +37,26 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    variant = models.ForeignKey(ProductVariant, on_delete=models.PROTECT)
-    quantity = models.PositiveIntegerField(default=1)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
+    def get_total_price(self):
+        total = 0
+        for item in self.items.all():
+            total += item.get_total_price()
+        return total
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
+    variant = models.ForeignKey(
+        ProductVariant,
+        on_delete=models.PROTECT
+    )
+    quantity = models.PositiveIntegerField(default=1)
+
+    def get_total_price(self):
+        return self.variant.price * self.quantity

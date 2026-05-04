@@ -23,4 +23,13 @@
 .trash_button {
   border: 0;
   background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: var(--primary-color);
+}
+
+.trash_icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -14,6 +14,10 @@
   margin-left: 16px;
   font-family: 'Horizontal';
   border: 0;
-  color: var(--white-color);
-  background-color: rgba(8, 8, 8, 0.8);
+  color: var(--solid-button-fg);
+  background-color: var(--solid-button-bg);
+}
+
+.button_click:hover {
+  background-color: var(--solid-button-hover-bg);
 }

@@ -1,5 +1,7 @@
 import { type FC, type SVGProps } from 'react';
 
+import styles from './Icon.module.css';
+
 interface IconProps {
   Svg: FC<SVGProps<SVGSVGElement>>,
   width: number,
@@ -9,9 +11,9 @@ interface IconProps {
 
 const Icon = ({Svg, width, height, label}: IconProps) => {
   return (
-    <span>
-      <Svg width={width} height={height}/>
-      <span className='visually-hidden' aria-label={label}>{label}</span>
+    <span className={styles.wrap}>
+      <Svg width={width} height={height} />
+      <span className="visually-hidden">{label}</span>
     </span>
   )
 }

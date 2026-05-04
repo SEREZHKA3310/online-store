@@ -1,0 +1,10 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+}
+
+.wrap :global(svg) {
+  flex-shrink: 0;
+}

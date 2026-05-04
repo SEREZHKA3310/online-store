@@ -12,11 +12,11 @@
 }
 
 .image_wrapper {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--surface-tint);
   transition: background-color 0.4s ease-in;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: var(--surface-tint-hover);
   }
 }
 
@@ -48,7 +48,7 @@
 }
 
 .desc_wrapper {
-  border-top: 1.5px solid #000;
+  border-top: 1.5px solid var(--border-strong);
   padding-top: 18px;
   margin-top: 28px;
   display: flex;
@@ -59,13 +59,13 @@
 .add_basket {
   width: 100%;
   height: 52px;
-  color: var(--white-color);
-  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--solid-button-fg);
+  background-color: var(--solid-button-bg);
   font-family: 'Outfit';
 }
 
 .add_basket:hover {
-  background-color: rgba(45, 45, 45, 0.8);
+  background-color: var(--solid-button-hover-bg);
 }
 
 .size_buttons {
@@ -84,9 +84,9 @@
   justify-content: center;
   margin-right: 10px;
   margin-bottom: 5px;
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--ghost-button-fg);
   background-color: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--ghost-button-border);
   font-family: 'Outfit';
   font-size: 16px;
   cursor: pointer;
@@ -94,18 +94,18 @@
 }
 
 .size_button:hover {
-  border-color: rgba(0, 0, 0, 0.8);
+  border-color: var(--ghost-button-border-hover);
 }
 
 .active {
-  color: var(--white-color);
-  background-color: rgba(0, 0, 0, 0.8);
-  border-color: rgba(0, 0, 0, 0.8);
+  color: var(--solid-button-fg);
+  background-color: var(--solid-button-bg);
+  border-color: var(--ghost-button-border-hover);
 }
 
 .size_button:disabled {
-  color: rgba(0, 0, 0, 0.3);
-  border-color: rgba(0, 0, 0, 0.2);
+  color: var(--ghost-button-disabled-fg);
+  border-color: var(--ghost-button-disabled-border);
   cursor: not-allowed;
 }
 

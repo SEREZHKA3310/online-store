@@ -11,12 +11,12 @@
 .input_code {
   width: 466px;
   height: 48px;
-  background-color: var(--white-color);
+  background-color: var(--surface-paper);
   color: var(--text-color21);
   padding-inline: 16px;
   border: 0;
 }
 
 .input_code::placeholder {
-  color: rgba(33, 33, 33, 0.16);
+  color: var(--placeholder-color);
 }
