@@ -53,20 +53,65 @@ class Router {
 export default Router;
 
 {
-  /*Итеротор 
-  function createIterator(cart) {
-  const items = Object.values(cart.data)
-  let index = 0
+  /*Итеротор*/
+}
+function createIterator(cart) {
+  const items = Object.values(cart.data);
+  let index = 0;
 
   return {
     next() {
       if (index < items.length) {
-        return { value: items[index++], done: false }
+        return { value: items[index++], done: false };
       }
-      return { done: true }
-    }
+      return { done: true };
+    },
+  };
+}
+
+{
+  /*команда*/
+}
+const incCount = () => {
+    const newcart = cart.map((item) =>
+      item.id === clothesId && item.size === clothesSize ? { ...item, count: item.count + 1 } : item
+    );
+    setCart(newcart);
   }
+
+  const decCount = () => {
+    const newcart = cart.map((item) =>
+      item.id === clothesId && item.size === clothesSize ? { ...item, count: item.count - 1 } : item
+    ).filter(item => item.count > 0);
+
+    setCart(newcart);
+  }
+};
+
+{
+  /*Фасад - присутствует в коде*/
 }
-  */
+const CartProvider = ({children}: CartContextProps) => {
+  const {
+    cart,
+    setCart,
+    addToCart,
+    deleteCloth
+  } = useCart()
+
+  return (
+    <CartContext.Provider
+      value={{
+        cart: cart || [],
+        setCart,
+        addToCart,
+        deleteCloth
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  )
 }
+
+
 ```
