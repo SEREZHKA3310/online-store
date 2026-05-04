@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.pagination import PageNumberPagination
 
-from .models import Product
+from main.models import Product
 from .serializers import ProductSerializer
 
 class ArticlePagination(PageNumberPagination):

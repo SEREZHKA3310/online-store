@@ -1,54 +1,72 @@
 ```tsx
-import type Component from './Component'
+import type Component from "./Component";
 
 class Router {
-  private container!: Node
-  private currentPage: Component | null = null
-  private routes = new Map<string, Component>()
+  private container!: Node;
+  private currentPage: Component | null = null;
+  private routes = new Map<string, Component>();
 
   constructor(container?: Node) {
-    this.container = container!
+    this.container = container!;
   }
 
   private onRoute() {
-    const route = this.routes.get(window.location.pathname)
+    const route = this.routes.get(window.location.pathname);
     if (!route) {
-      throw new Error()
+      throw new Error();
     } else {
       if (this.currentPage) {
-        this.currentPage.dispatchComponentWillUmnout()
-        this.container.removeChild(this.currentPage.getContent())
+        this.currentPage.dispatchComponentWillUmnout();
+        this.container.removeChild(this.currentPage.getContent());
       }
-      this.currentPage = route
+      this.currentPage = route;
 
-      this.container.appendChild(route.getContent())
-      route.dispatchComponentDidMount()
+      this.container.appendChild(route.getContent());
+      route.dispatchComponentDidMount();
     }
   }
 
   public navigate(pathname: string) {
-    window.history.pushState(null, '', pathname)
+    window.history.pushState(null, "", pathname);
 
-    this.onRoute()
+    this.onRoute();
   }
 
   public redirect(pathname: string) {
-    window.history.replaceState(null, '', pathname)
+    window.history.replaceState(null, "", pathname);
 
-    this.onRoute()
+    this.onRoute();
   }
 
   public use(pathname: string, page: new () => Component) {
-    this.routes.set(pathname, new page())
+    this.routes.set(pathname, new page());
 
-    return this
+    return this;
   }
 
   public start() {
-    window.addEventListener('popstate', this.onRoute.bind(this))
-    this.onRoute()
+    window.addEventListener("popstate", this.onRoute.bind(this));
+    this.onRoute();
   }
 }
 
-export default Router
+export default Router;
+
+{
+  /*Итеротор 
+  function createIterator(cart) {
+  const items = Object.values(cart.data)
+  let index = 0
+
+  return {
+    next() {
+      if (index < items.length) {
+        return { value: items[index++], done: false }
+      }
+      return { done: true }
+    }
+  }
+}
+  */
+}
 ```
