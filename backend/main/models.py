@@ -36,7 +36,13 @@ class Order(models.Model):
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),
     ]
+    PAYMENT_CHOICES = [
+        ('SBP', 'SBP'),
+        ('cash', 'Cash'),
+        ('card', 'Card'),
+    ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='card')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const root = createRoot(element);
   const client = new QueryClient();
 
-  // window.__TANSTACK_QUERY_CLIENT__ = client;
+  window.__TANSTACK_QUERY_CLIENT__ = client;
 
   root.render(
     <StrictMode>

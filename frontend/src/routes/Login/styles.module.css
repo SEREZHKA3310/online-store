@@ -1,0 +1,29 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 35px;
+}
+
+.form_input {
+  border: none;
+  border-bottom: 1px solid var(--primary-color);
+  width: 720px;
+  height: 60px;
+  color: var(--primary-color);
+  background-color: transparent;
+}
+
+.header_text {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  q {
+    font-family: "Source Serif 4";
+    font-weight: 400;
+    font-size: 74px;
+    letter-spacing: -3%;
+  }
+}
