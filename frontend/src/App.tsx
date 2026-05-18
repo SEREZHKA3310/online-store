@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/layouts/Layout";
+import Layout from "./components/Layout";
 import Home from "./pages/Home/Home";
-import { Catalog, Login, Profile } from "~routes";
 import ProductPage from "./pages/Product/ProductPage";
-import Cart from "./pages/Cart/Cart";
 import { Suspense } from "react";
 import SkeletonProductCard from "./ui/SkeletonProductCard/SkeletonProductCard";
 import useUser from "./hooks/useUser";
+
+import { Catalog, Login, Profile, Cart } from "~routes";
 
 const App = () => {
   const data = useUser();

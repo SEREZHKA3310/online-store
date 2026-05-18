@@ -36,10 +36,12 @@ const parseResponse = async (response: Response) => {
 
 const request = async <T>(method: HttpMethod, url: string, config?: RequestConfig): Promise<HttpResponse<T>> => {
   const query = createQueryString(config?.params);
+  const token = localStorage.getItem("token");
   const response = await fetch(`${BASE_URL}${url}${query}`, {
     method,
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
       ...(config?.headers ?? {}),
     },
     body: config?.body ? JSON.stringify(config.body) : undefined,

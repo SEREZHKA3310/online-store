@@ -115,3 +115,24 @@ const CartProvider = ({children}: CartContextProps) => {
 
 
 ```
+
+```ts
+// Заместитель
+const obj = {
+  name: "Ivan"
+  age: 19
+}
+
+const proxyObj = new Proxy(obj, {
+  get(target, prop) {
+    console.log(prop)
+    return target[prop]
+  }
+  set(target, prop, value) {
+    console.log(prop, value)
+    target[prop] = value
+  }
+})
+
+proxyObj.name
+```

@@ -1,0 +1,1 @@
+export { useSimilarProducts } from "./query";

@@ -1,17 +1,18 @@
 from urllib.parse import urljoin
-
+from django.db import transaction
 from django.conf import settings
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import Product, Customer, Order
-
+from rest_framework import serializers
+from .models import Order, OrderItem, ProductVariant, Customer
 
 class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'info', 'images', 'main_image']
+        fields = ['id', 'name', 'brand', 'category', 'description', 'images', 'main_image']
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -62,12 +63,65 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
+from rest_framework import serializers
+from .models import Order, OrderItem
 
-class OrderPaymentSerializer(serializers.Serializer):
-    order_id = serializers.IntegerField()
-    method = serializers.ChoiceField(choices=[('sbp','СБП'), ('card','Карта'), ('cash','Наличные')])
-    def validate_order_id(self, value):
+class OrderItemDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='variant.id')
+    name = serializers.CharField(source='variant.product.name')
+    main_image = serializers.SerializerMethodField()
+    images = serializers.JSONField(source='variant.product.images')
+    description = serializers.JSONField(source='variant.product.description')
+    size = serializers.CharField(source='variant.size')
+    price = serializers.FloatField(source='variant.price')
+    count = serializers.IntegerField(source='quantity')
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            'id', 'name', 'main_image', 'images', 
+            'description', 'count', 'size', 'price'
+        ]
+
+    def get_main_image(self, obj):
+        if obj.variant.product.main_image:
+            return obj.variant.product.main_image.url
+        return None
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemDetailSerializer(many=True, read_only=True)
+    input_items = serializers.JSONField(write_only=True)
+    total_price = serializers.FloatField(write_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['id', 'payment', 'status', 'items', 'input_items', 'total_price']
+        read_only_fields = ['id', 'status']
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('input_items')
+        frontend_sum = validated_data.pop('total_price') 
+        
         user = self.context['request'].user
-        if not Order.objects.filter(id=value, customer__user=user).exists():
-            raise serializers.ValidationError("Заказ не найден или доступ запрещен.")
-        return value
+        customer, _ = Customer.objects.get_or_create(user=user)
+        
+        with transaction.atomic():
+            order = Order.objects.create(customer=customer, **validated_data)
+            
+            for item in items_data:
+                variant = ProductVariant.objects.select_for_update().get(id=item['id'])
+
+                # if variant.stock < item['count']:
+                #     raise serializers.ValidationError(f"Low stock for {variant.id}")
+                
+                OrderItem.objects.create(
+                    order=order, 
+                    variant=variant, 
+                    quantity=item['count']
+                )
+
+                # variant.stock -= item['count']
+                # variant.save()
+                
+            return order

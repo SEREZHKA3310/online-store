@@ -22,9 +22,9 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
-      "~common/*": ["./src/common/*"],
       "~components": ["./src/components"],
-      "~routes": ["./src/routes"]
+      "~routes": ["./src/routes"],
+      "~api": ["./src/api"]
     }
   },
   "include": ["src"]

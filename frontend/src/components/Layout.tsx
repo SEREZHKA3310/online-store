@@ -1,6 +1,7 @@
-import { Outlet } from 'react-router';
-import Header from '../../widgets/Header/Header';
-import Footer from '../../widgets/Footer/Footer';
+import { Outlet } from "react-router";
+
+import Header from "../widgets/Header/Header";
+import Footer from "../widgets/Footer/Footer";
 
 const Layout = () => {
   return (
@@ -11,7 +12,7 @@ const Layout = () => {
       </main>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

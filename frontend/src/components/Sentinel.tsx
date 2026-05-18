@@ -10,7 +10,6 @@ const Sentinel: FC<SentinelProps> = ({ callback }) => {
     useEffect(() => {
         const observer = new IntersectionObserver(([first]) => {
             if (first.isIntersecting) {
-                console.log(1)
                 callback()
             }
         }, {

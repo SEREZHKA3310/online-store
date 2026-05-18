@@ -1,15 +1,19 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.authtoken.models import Token as AuthToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework import status
+from rest_framework.views import APIView
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import OneHotEncoder
+import numpy as np
 
 from main.models import Product, Order
-from .serializers import LoginSerializer, ProductSerializer, RegisterSerializer, OrderPaymentSerializer
+from .serializers import LoginSerializer, ProductSerializer, RegisterSerializer, OrderSerializer
 from .payment import SBPPayment, CardPayment, CashPayment, PaymentAdapter
 
 class ArticlePagination(PageNumberPagination):
@@ -19,10 +23,91 @@ class ArticlePagination(PageNumberPagination):
 
 # Create your views here.
 class ProductViewSet(ReadOnlyModelViewSet):
-    queryset = Product.objects.all().order_by('pk')
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = ArticlePagination
 
+    @action(detail=True, methods=['GET'])
+    def similar(self, request, pk=None):
+        product = self.get_object()
+
+        products = list(
+            Product.objects.exclude(id=product.id)
+        )
+
+        # Все значения для encoder
+        brands = [[p.brand] for p in Product.objects.all()]
+        categories = [[p.category] for p in Product.objects.all()]
+
+        brand_encoder = OneHotEncoder(
+            sparse_output=False,
+            handle_unknown='ignore'
+        )
+
+        category_encoder = OneHotEncoder(
+            sparse_output=False,
+            handle_unknown='ignore'
+        )
+
+        brand_encoder.fit(brands)
+        category_encoder.fit(categories)
+
+        target_brand = brand_encoder.transform(
+            [[product.brand]]
+        )[0]
+
+        target_category = category_encoder.transform(
+            [[product.category]]
+        )[0]
+
+        target_vector = np.concatenate([
+            target_brand,
+            target_category,
+        ]).reshape(1, -1)
+
+        similarities = []
+
+        for p in products:
+
+            brand_vector = brand_encoder.transform(
+                [[p.brand]]
+            )[0]
+
+            category_vector = category_encoder.transform(
+                [[p.category]]
+            )[0]
+
+            vector = np.concatenate([
+                brand_vector,
+                category_vector,
+            ]).reshape(1, -1)
+
+            similarity = cosine_similarity(
+                target_vector,
+                vector
+            )[0][0]
+
+            similarities.append((similarity, p))
+
+        similarities.sort(
+            key=lambda x: x[0],
+            reverse=True
+        )
+
+        result = []
+
+        for similarity, product in similarities[:3]:
+
+            data = ProductSerializer(product).data
+
+            data['similarity'] = round(
+                float(similarity),
+                3
+            )
+
+            result.append(data)
+
+        return Response(result)
 
 @api_view(['GET'])
 def prices_by_product(request, pk: int):
@@ -121,3 +206,17 @@ def pay_order_view(request):
         'status': order.status,
         'message': result_message
     })
+
+class CheckoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        print(request.user)
+        serializer = OrderSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            order = serializer.save()
+            return Response({
+                "id": order.id,
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

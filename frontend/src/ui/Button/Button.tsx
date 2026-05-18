@@ -1,15 +1,17 @@
-import styles from './style.module.css'
+import styles from "./style.module.css";
 
 interface ButtonProps {
-  type: 'submit' | 'button',
-  className?: string,
-  children: string
+  type: "submit" | "button";
+  className?: string;
+  children: string;
 }
 
-const Button = ({type, children, className}: ButtonProps) => {
+const Button = ({ type, children, className }: ButtonProps) => {
   return (
-    <button type={type} className={className ? styles[className] : ''}>{children}</button>
-  )
-}
+    <button type={type} className={className ? styles[className] : ""}>
+      {children}
+    </button>
+  );
+};
 
-export default Button
+export default Button;

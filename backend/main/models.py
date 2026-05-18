@@ -10,11 +10,11 @@ class Customer(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
+    description = models.JSONField()
+    brand = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
     main_image = models.ImageField(upload_to="products/main_images/", blank=True, null=True)
     images = models.JSONField(default=list)
-    info = models.JSONField(default=list)
-    description = models.JSONField()
-
 
 
 class ProductVariant(models.Model):

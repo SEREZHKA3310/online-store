@@ -1,7 +1,5 @@
-.wrapper {
-  margin-top: 90px;
+.content {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
 }
 
@@ -26,8 +24,8 @@
 }
 
 .product_wrapper {
-  padding-top: 40px;
-  width: 705px;
+  position: sticky;
+  top: 0;
 }
 
 .header_name,
@@ -44,7 +42,7 @@
 }
 
 .info_wrapper {
-  padding-block: 100px
+  padding-block: 100px;
 }
 
 .desc_wrapper {
@@ -61,7 +59,7 @@
   height: 52px;
   color: var(--solid-button-fg);
   background-color: var(--solid-button-bg);
-  font-family: 'Outfit';
+  font-family: "Outfit";
 }
 
 .add_basket:hover {
@@ -87,10 +85,12 @@
   color: var(--ghost-button-fg);
   background-color: transparent;
   border: 1px solid var(--ghost-button-border);
-  font-family: 'Outfit';
+  font-family: "Outfit";
   font-size: 16px;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
 
 .size_button:hover {
@@ -112,4 +112,11 @@
 .counter_wrapper {
   display: flex;
   column-gap: 30px;
+}
+
+.similars {
+  margin-block: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
