@@ -285,41 +285,44 @@ class UserOrdersView(APIView):
 class RequestReturnView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, order_id):
+    def post(self, request):
+        order_id = request.data.get("id")
+        reason = request.data.get("reason", "")
+        if not order_id:
+            return Response(
+                {"detail": "Не передан id заказа"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         try:
-            order = Order.objects.get(id=order_id)
+            order = Order.objects.get(
+                id=order_id,
+                customer__user=request.user
+            )
         except Order.DoesNotExist:
             return Response(
-                {"error": "Order not found"},
-                status=404
+                {"detail": "Заказ не найден"},
+                status=status.HTTP_404_NOT_FOUND
             )
-
-        if order.customer.user != request.user:
+        if order.status != "delivered":
             return Response(
-                {"error": "Forbidden"},
-                status=403
+                {"detail": "Вернуть можно только доставленный заказ"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-
-        if order.status != 'delivered':
+        if not order.delivered_at:
             return Response(
-                {"error": "Order is not delivered"},
-                status=400
+                {"detail": "У заказа нет даты доставки"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-
         if timezone.now() > order.delivered_at + timedelta(days=14):
             return Response(
-                {"error": "Return period expired"},
-                status=400
+                {"detail": "Срок возврата истёк"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-
         ReturnRequest.objects.create(
             order=order,
-            reason=request.data.get('reason', '')
+            reason=reason
         )
-
-        order.status = 'return_requested'
+        order.status = "return_requested"
         order.save()
-
-        return Response({
-            "message": "Return request created"
-        })
+        serializer = OrderSerializer(order, context={"request": request})
+        return Response(serializer.data)

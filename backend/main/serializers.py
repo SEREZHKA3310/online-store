@@ -4,6 +4,8 @@ from django.conf import settings
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from django.utils import timezone
+from datetime import timedelta
 
 from .models import Product, Customer, Order
 from rest_framework import serializers
@@ -93,15 +95,23 @@ class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemDetailSerializer(many=True, read_only=True)
     input_items = serializers.JSONField(write_only=True, required=False)
     total_price = serializers.SerializerMethodField()
+    can_return = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
-        fields = ['id', 'payment', 'status', 'items', 'input_items', 'total_price']
-        read_only_fields = ['id', 'status']
+        fields = ['id', 'payment', 'status', 'items', 'input_items', 'total_price', 'can_return', 'delivered_at']
+        read_only_fields = ['id', 'status''items', 'total_price', 'can_return', 'delivered_at']
     
     def get_total_price(self, obj):
-
         return float(obj.get_total_price())
+
+    def get_can_return(self, obj):
+        if obj.status != 'delivered':
+            return False
+        if not obj.delivered_at:
+            return False
+        return timezone.now() <= obj.delivered_at + timedelta(days=14)
+
 
     def create(self, validated_data):
         items_data = validated_data.pop('input_items')

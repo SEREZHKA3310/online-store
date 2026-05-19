@@ -15,9 +15,6 @@ urlpatterns = [
     path("orders/", UserOrdersView.as_view()),
     path("orders/<int:order_id>/", OrderDetailView.as_view()),
     path("orders/cancel/", OrderCancelView.as_view()),
-    path(
-    'orders/<int:order_id>/return/',
-    RequestReturnView.as_view()
-),
+    path("orders/return/", RequestReturnView.as_view()),
     path('', include(router.urls)),
 ]
