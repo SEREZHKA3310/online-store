@@ -19,7 +19,7 @@ const Header = () => {
         <div className={styles.logo_container}>
           <ThemeToggle />
           <Link to={''}><Icon Svg={SearchSvg} width={25} height={25} label={'Поиск'} /></Link>
-          <Link to={''}><Icon Svg={ProfileSvg} width={25} height={25} label={'Профиль'} /></Link>
+          <Link to={'profile'}><Icon Svg={ProfileSvg} width={25} height={25} label={'Профиль'} /></Link>
           <Link to={'cart'}><Icon Svg={BasketSvg} width={25} height={25} label={'Логотип'} /></Link>
         </div>
       </div>

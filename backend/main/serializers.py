@@ -91,37 +91,36 @@ class OrderItemDetailSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemDetailSerializer(many=True, read_only=True)
-    input_items = serializers.JSONField(write_only=True)
-    total_price = serializers.FloatField(write_only=True)
+    input_items = serializers.JSONField(write_only=True, required=False)
+    total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ['id', 'payment', 'status', 'items', 'input_items', 'total_price']
         read_only_fields = ['id', 'status']
+    
+    def get_total_price(self, obj):
+
+        return float(obj.get_total_price())
 
     def create(self, validated_data):
         items_data = validated_data.pop('input_items')
-        frontend_sum = validated_data.pop('total_price') 
-        
+        validated_data.pop('total_price', None)
         user = self.context['request'].user
         customer, _ = Customer.objects.get_or_create(user=user)
-        
         with transaction.atomic():
-            order = Order.objects.create(customer=customer, **validated_data)
-            
+            order = Order.objects.create(
+                customer=customer,
+                **validated_data
+            )
             for item in items_data:
-                variant = ProductVariant.objects.select_for_update().get(id=item['id'])
-
-                # if variant.stock < item['count']:
-                #     raise serializers.ValidationError(f"Low stock for {variant.id}")
-                
+                variant = ProductVariant.objects.select_for_update().get(
+                    id=item['id']
+                )
                 OrderItem.objects.create(
-                    order=order, 
-                    variant=variant, 
+                    order=order,
+                    variant=variant,
                     quantity=item['count']
                 )
 
-                # variant.stock -= item['count']
-                # variant.save()
-                
             return order

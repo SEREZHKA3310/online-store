@@ -25,7 +25,7 @@ const Cart = () => {
     console.log(1);
     e.preventDefault();
     const newId = await mutate(pay);
-    nav(`orders/${newId.data.id}`);
+    nav(`/orders/${newId.data.id}`);
   };
 
   return (

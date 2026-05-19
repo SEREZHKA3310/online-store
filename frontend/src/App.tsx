@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import SkeletonProductCard from "./ui/SkeletonProductCard/SkeletonProductCard";
 import useUser from "./hooks/useUser";
 
-import { Catalog, Login, Profile, Cart } from "~routes";
+import { Catalog, Login, Profile, Cart, OrderStatus } from "~routes";
 
 const App = () => {
   const data = useUser();
@@ -22,6 +22,7 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="catalog" element={<Catalog />} />
           <Route path="product/:id" element={<ProductPage />} />
+          <Route path="orders/:id" element={<OrderStatus />} />
           <Route
             path="cart"
             element={

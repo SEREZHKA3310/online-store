@@ -220,3 +220,60 @@ class CheckoutView(APIView):
             }, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderDetailView(APIView):
+    def get(self, request, order_id):
+        try:
+            order = (
+                Order.objects
+                .prefetch_related("items__variant__product")
+                .get(id=order_id)
+            )
+        except Order.DoesNotExist:
+            return Response(
+                {"detail": "Заказ не найден"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = OrderSerializer(order, context={"request": request})
+        return Response(serializer.data)
+
+
+class OrderCancelView(APIView):
+    def patch(self, request):
+        order_id = request.data.get("id")
+        if not order_id:
+            return Response(
+                {"detail": "Не передан id заказа"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            order = Order.objects.get(
+                id=order_id,
+                customer__user=request.user
+            )
+        except Order.DoesNotExist:
+            return Response(
+                {"detail": "Заказ не найден"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        order.status = "cancelled"
+        order.save()
+        serializer = OrderSerializer(order, context={"request": request})
+        return Response(serializer.data)
+
+
+class UserOrdersView(APIView):
+    def get(self, request):
+        orders = (
+            Order.objects
+            .filter(customer__user=request.user)
+            .prefetch_related("items__variant__product")
+            .order_by("-created_at")
+        )
+        serializer = OrderSerializer(
+            orders,
+            many=True,
+            context={"request": request}
+        )
+        return Response(serializer.data)
