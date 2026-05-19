@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import ProductViewSet, login_view, prices_by_product, profile_view, register_view, pay_order_view, CheckoutView, OrderDetailView, OrderCancelView, UserOrdersView
+from .views import ProductViewSet, login_view, prices_by_product, profile_view, register_view, pay_order_view, CheckoutView, OrderDetailView, OrderCancelView, UserOrdersView, RequestReturnView
 
 router = DefaultRouter()
 router.register(r'products', ProductViewSet)
@@ -15,5 +15,9 @@ urlpatterns = [
     path("orders/", UserOrdersView.as_view()),
     path("orders/<int:order_id>/", OrderDetailView.as_view()),
     path("orders/cancel/", OrderCancelView.as_view()),
+    path(
+    'orders/<int:order_id>/return/',
+    RequestReturnView.as_view()
+),
     path('', include(router.urls)),
 ]

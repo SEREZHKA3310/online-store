@@ -11,8 +11,11 @@ from rest_framework.views import APIView
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import OneHotEncoder
 import numpy as np
+from django.utils import timezone
+from datetime import timedelta
 
-from main.models import Product, Order
+
+from main.models import Product, Order, ReturnRequest
 from .serializers import LoginSerializer, ProductSerializer, RegisterSerializer, OrderSerializer
 from .payment import SBPPayment, CardPayment, CashPayment, PaymentAdapter
 
@@ -277,3 +280,46 @@ class UserOrdersView(APIView):
             context={"request": request}
         )
         return Response(serializer.data)
+    
+
+class RequestReturnView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, order_id):
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found"},
+                status=404
+            )
+
+        if order.customer.user != request.user:
+            return Response(
+                {"error": "Forbidden"},
+                status=403
+            )
+
+        if order.status != 'delivered':
+            return Response(
+                {"error": "Order is not delivered"},
+                status=400
+            )
+
+        if timezone.now() > order.delivered_at + timedelta(days=14):
+            return Response(
+                {"error": "Return period expired"},
+                status=400
+            )
+
+        ReturnRequest.objects.create(
+            order=order,
+            reason=request.data.get('reason', '')
+        )
+
+        order.status = 'return_requested'
+        order.save()
+
+        return Response({
+            "message": "Return request created"
+        })
